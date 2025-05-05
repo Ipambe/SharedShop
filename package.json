@@ -2,7 +2,7 @@
   "name": "sharedshop",
   "version": "1.0.0",
   "scripts": {
-    "drizzle:push": "cd apps/api && set NODE_PATH=../../node_modules&& pnpx drizzle-kit push"
+    "drizzle:push": "cd apps/api && pnpm drizzle-kit push && cd ../.."
   },
   "keywords": [],
   "author": "Adolfo Rosa",
