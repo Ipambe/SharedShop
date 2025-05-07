@@ -1,8 +1,8 @@
 import { DATABASE_CONNECTION } from '@/common/database/database-connection'
 import { DatabaseType } from '@/common/database/schema'
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
-import { CreateUserDto } from './DTOs/createUserDto'
 import { users } from '@/common/database/schema/users'
+import { CreateUserDto } from './DTOs/CreateUserDto'
 
 @Injectable()
 export class UserService {
