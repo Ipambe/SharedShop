@@ -5,7 +5,8 @@ loadEnvFile()
 
 const envSchema = z.object({
   TURSO_DB_URL: z.string().url(),
-  TURSO_AUTH_TOKEN: z.string()
+  TURSO_AUTH_TOKEN: z.string(),
+  CLERK_SECRET_KEY: z.string()
 })
 
 const { success, error, data } = envSchema.safeParse(process.env)
@@ -15,4 +16,4 @@ if (!success) {
   process.exit(1)
 }
 
-export const { TURSO_AUTH_TOKEN, TURSO_DB_URL } = data
+export const { TURSO_AUTH_TOKEN, TURSO_DB_URL, CLERK_SECRET_KEY } = data
