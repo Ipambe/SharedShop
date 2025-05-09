@@ -23,9 +23,14 @@ export class ClerkAuthGuard implements CanActivate {
     }
 
     try {
-      await verifyToken(token, {
+      const payload = await verifyToken(token, {
         secretKey: CLERK_SECRET_KEY
       })
+      if (!payload) {
+        this.logger.error('Invalid token')
+        return false
+      }
+      request.user = payload
     } catch (err) {
       this.logger.error(err)
       return false
