@@ -56,7 +56,7 @@ export class ShoppingListsService {
     const shoppingList = await this.db.query.shoppingLists.findFirst({
       where: eq(shoppingLists.id, id),
       with: {
-        users: true
+        shoppingListMembers: true
       }
     })
 
@@ -66,7 +66,7 @@ export class ShoppingListsService {
         HttpStatus.NOT_FOUND
       )
 
-    return shoppingList.users
+    return shoppingList.shoppingListMembers
   }
 
   async toggleStatus(id: number, itemId: number) {
