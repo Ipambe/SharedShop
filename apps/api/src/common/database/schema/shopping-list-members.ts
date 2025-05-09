@@ -1,12 +1,12 @@
 import { shoppingLists } from './shopping-lists'
 import { users } from './users'
 import { relations, sql } from 'drizzle-orm'
-import { sqliteTable, integer, primaryKey } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, integer, text, primaryKey } from 'drizzle-orm/sqlite-core'
 
 export const shoppingListMembers = sqliteTable(
   'shopping-list-members',
   {
-    userId: integer()
+    userId: text()
       .notNull()
       .references(() => users.id),
     shoppingListId: integer()
