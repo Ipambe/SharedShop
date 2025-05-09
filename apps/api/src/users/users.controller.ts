@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common'
+import { Body, Controller, Get, Inject, Post, Request } from '@nestjs/common'
 import { UserService } from './users.service'
 import { CreateUserDto } from './DTOs/CreateUserDto'
-
+import { Request as ExpressRequest } from 'express'
 @Controller('users')
 export class UserController {
   constructor(
@@ -20,9 +20,9 @@ export class UserController {
     return newUser
   }
 
-  @Get(':id/shopping-lists')
-  async getShoppingLists(@Param(':id') id: string) {
-    const lists = await this.userService.getShoppingLists(id)
+  @Get('/shopping-lists')
+  async getShoppingLists(@Request() req: ExpressRequest) {
+    const lists = await this.userService.getShoppingLists(req.user!.sub)
     return lists
   }
 }

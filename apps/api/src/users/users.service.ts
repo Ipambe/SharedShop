@@ -3,6 +3,9 @@ import { DatabaseType } from '@/common/database/schema'
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
 import { users } from '@/common/database/schema/users'
 import { CreateUserDto } from './DTOs/CreateUserDto'
+import { shoppingLists } from '@/common/database/schema/shopping-lists'
+import { shoppingListMembers } from '@/common/database/schema/shopping-list-members'
+import { eq } from 'drizzle-orm'
 
 @Injectable()
 export class UserService {
@@ -31,19 +34,23 @@ export class UserService {
   }
 
   async getShoppingLists(id: string) {
-    const user = await this.db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.id, id),
-      with: {
-        shoppingLists: true
-      }
-    })
-
-    if (!user)
+    try {
+      const lists = await this.db
+        .select({ id: shoppingLists.id, name: shoppingLists.name })
+        .from(shoppingLists)
+        .where(eq(shoppingListMembers.userId, id))
+        .innerJoin(
+          shoppingListMembers,
+          eq(shoppingLists.id, shoppingListMembers.shoppingListId)
+        )
+        .innerJoin(users, eq(shoppingListMembers.userId, users.id))
+      return lists
+    } catch (error) {
+      console.error(error)
       throw new HttpException(
-        `No existe un usuario con el id ${id}`,
-        HttpStatus.NOT_FOUND
+        `Error al obtener las listas de compras del usuario con id ${id}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
       )
-
-    return user.shoppingLists
+    }
   }
 }
