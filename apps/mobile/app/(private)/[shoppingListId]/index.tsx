@@ -7,7 +7,7 @@ export default function Index() {
   }
   return (
     <View className='flex-1 items-center justify-center'>
-      <Text>{shoppingListId}</Text>
+      <Text className='text-2xl font-bold'>{shoppingListId} - index</Text>
     </View>
   )
 }
