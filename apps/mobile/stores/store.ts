@@ -1,10 +1,5 @@
-import { ShoppingList, User } from '@/types'
+import { ShoppingList } from '@/types'
 import { create } from 'zustand'
-
-interface UserStore {
-  user: User | null
-  setUser: (user: User) => void
-}
 
 interface ShoppingListsStore {
   shoppingLists: ShoppingList[]
@@ -13,24 +8,15 @@ interface ShoppingListsStore {
   removeShoppingList: (id: number) => void
 }
 
-export const useStore = create<UserStore & ShoppingListsStore>()((set) => ({
-  user: null,
-  setUser: (user) => set({ user }),
+export const useStore = create<ShoppingListsStore>()((set) => ({
   shoppingLists: [],
-  setShoppingLists: (shoppingLists) =>
-    set((state) =>
-      JSON.stringify(state.shoppingLists) !== JSON.stringify(shoppingLists)
-        ? { shoppingLists }
-        : state
-    ),
+  setShoppingLists: (shoppingLists) => set({ shoppingLists }),
   addShoppingList: (list) =>
     set((state) => ({
-      ...state,
       shoppingLists: [...state.shoppingLists, list]
     })),
   removeShoppingList: (id) =>
     set((state) => ({
-      ...state,
       shoppingLists: state.shoppingLists.filter((list) => list.id !== id)
     }))
 }))

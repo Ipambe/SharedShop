@@ -1,17 +1,16 @@
 import { api } from '@/api'
-import { useStore } from '@/stores'
-import { useRef, useEffect } from 'react'
+import { useStore } from '@/stores/store'
+import { useEffect } from 'react'
 import { useAuth } from '@clerk/clerk-expo'
-import { Text, View, FlatList } from 'react-native'
+import { View } from 'react-native'
+import { ShoppingLists } from '@/components/ShoppingLists'
+import { AddShoppingListForm } from '@/components/AddShoppingListForm'
 
 export default function Index() {
-  const shoppingLists = useStore((state) => state.shoppingLists)
-
-  const setShoppingLists = useRef(useStore.getState().setShoppingLists)
+  const setShoppingLists = useStore((s) => s.setShoppingLists)
   const { getToken, isLoaded } = useAuth()
-
   useEffect(() => {
-    if (!isLoaded) return console.log('not loaded yet')
+    if (!isLoaded) return
 
     const fetchShoppingLists = async () => {
       console.log('fetching shopping lists')
@@ -22,7 +21,7 @@ export default function Index() {
           Authorization: `Bearer ${token}`
         }
       })
-      setShoppingLists.current(data)
+      setShoppingLists(data)
       console.log('finished fetching', data)
     }
 
@@ -30,14 +29,10 @@ export default function Index() {
   }, [isLoaded, getToken, setShoppingLists])
 
   return (
-    <FlatList
-      data={shoppingLists}
-      renderItem={({ item }) => (
-        <View>
-          <Text className='text-black text-2xl'>{item.name}</Text>
-        </View>
-      )}
-    />
+    <View className='flex-1 relative bg-neutral-300 dark:bg-neutral-950'>
+      <ShoppingLists />
+      <AddShoppingListForm />
+    </View>
   )
 }
 

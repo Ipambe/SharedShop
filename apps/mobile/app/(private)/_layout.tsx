@@ -1,5 +1,4 @@
 import { api } from '@/api'
-import { useStore } from '@/stores'
 import { User } from '@/types'
 import { useAuth, useUser } from '@clerk/clerk-expo'
 import { Redirect, Tabs } from 'expo-router'
@@ -8,7 +7,6 @@ import { useEffect } from 'react'
 export default function PrivateLayout() {
   const { isSignedIn, isLoaded, getToken, signOut } = useAuth()
   const { user } = useUser()
-  const { setUser } = useStore()
 
   useEffect(() => {
     const checkOrCreateUser = async () => {
@@ -30,11 +28,10 @@ export default function PrivateLayout() {
         }
       )
       if (status > 400) return await signOut()
-      setUser(data)
       console.log(data)
     }
     checkOrCreateUser()
-  }, [signOut, user, getToken, isSignedIn, setUser])
+  }, [signOut, user, getToken, isSignedIn])
 
   if (!isLoaded) return null
 
