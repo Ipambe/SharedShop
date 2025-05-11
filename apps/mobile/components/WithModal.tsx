@@ -15,11 +15,9 @@ export const WithModal = ({
 }: WithModalProps) => {
   return (
     <View
-      className={`absolute top-0 left-0 right-0 bottom-0 bg-black/50 ${isModalVisible ? 'flex' : 'hidden'} items-center justify-center`}
+      className={`absolute z-50 top-0 left-0 right-0 bottom-0 bg-black/50 ${isModalVisible ? 'flex' : 'hidden'} items-center justify-center`}
     >
-      <View
-        className='w-96 aspect-square bg-fuchsia-50 dark:bg-neutral-700 rounded-lg p-4 gap-10'
-      >
+      <View className='w-[80%] bg-fuchsia-50 dark:bg-neutral-700 rounded-lg px-4 pt-4 pb-10 gap-10'>
         <View className='flex-row items-center justify-between'>
           <Text className='text-2xl text-neutral-100'>{modalTitle}</Text>
           <TouchableOpacity

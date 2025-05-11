@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 import { Button } from 'tamagui'
 
 interface ToggleModalButtonProps {
@@ -10,12 +10,22 @@ export const ToggleModalButton = ({ showModal }: ToggleModalButtonProps) => {
     <Button
       animation='bouncy'
       onPress={showModal}
-      background={'none'}
-      pressStyle={{ scale: 0.95, backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+      backgroundColor='#333'
+      position='absolute'
+      bottom={20}
+      right={20}
+      borderRadius={100}
+      width={70}
+      height={70}
+      zIndex={20}
+      justifyContent='center'
+      alignItems='center'
+      pressStyle={{
+        backgroundColor: '#444',
+        scale: 2.95
+      }}
     >
-      <View className='bg-blue-500 rounded-full p-4 aspect-square items-center justify-center'>
-        <Text className='text-white text-4xl font-bold'>X</Text>
-      </View>
+      <Text className='text-white text-6xl font-bold'>+</Text>
     </Button>
   )
 }

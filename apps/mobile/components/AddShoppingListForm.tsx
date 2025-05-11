@@ -1,10 +1,15 @@
+import { useAuth } from '@clerk/clerk-expo'
 import { ToggleModalButton } from './ToggleModalButton'
 import { WithModal } from './WithModal'
 import { useState } from 'react'
-import { Button, Form, Input } from 'tamagui'
+import { Input, Button, XStack } from 'tamagui'
+import { api } from '@/api'
+import { useStore } from '@/stores/store'
 
 export const AddShoppingListForm = () => {
   const [isModalVisible, setIsModalVisible] = useState(true)
+  const { getToken } = useAuth()
+  const addShoppingList = useStore((s) => s.addShoppingList)
 
   const showModal = () => {
     setIsModalVisible(true)
@@ -14,6 +19,17 @@ export const AddShoppingListForm = () => {
     setIsModalVisible(false)
   }
 
+  const handleAddShoppingList = async () => {
+    const token = await getToken()
+    const { data } = await api.post('', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    console.log('data', data)
+    addShoppingList(data)
+    closeModal()
+  }
   return (
     <>
       <ToggleModalButton showModal={showModal} />
@@ -22,12 +38,31 @@ export const AddShoppingListForm = () => {
         isModalVisible={isModalVisible}
         modalTitle='Agregar lista de compras'
       >
-        <Form onSubmit={() => console.log()}>
-          <Input />
-          <Form.Trigger asChild>
-            <Button></Button>
-          </Form.Trigger>
-        </Form>
+        <XStack gap={10} alignItems='center'>
+          <Input
+            placeholder='Nombre de la lista'
+            fontSize={20}
+            flex={1}
+            borderRadius={10}
+            padding={10}
+            focusStyle={{
+              borderColor: '#000',
+              backgroundColor: '#fff'
+            }}
+          />
+          <Button
+            onPress={handleAddShoppingList}
+            borderRadius={10}
+            padding={10}
+            marginLeft={10}
+            pressStyle={{
+              backgroundColor: '#444',
+              scale: 1.05
+            }}
+          >
+            Agregar lista
+          </Button>
+        </XStack>
       </WithModal>
     </>
   )
