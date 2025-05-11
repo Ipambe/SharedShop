@@ -4,6 +4,8 @@ import { shoppingListItems } from '@/common/database/schema/shopping-list-items'
 import { shoppingLists } from '@/common/database/schema/shopping-lists'
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
 import { and, eq } from 'drizzle-orm'
+import { CreateShoppingListDto } from './DTOs/CreateShoppingListDto'
+import { shoppingListMembers } from '@/common/database/schema/shopping-list-members'
 
 @Injectable()
 export class ShoppingListsService {
@@ -24,6 +26,26 @@ export class ShoppingListsService {
       )
 
     return shoppingList
+  }
+
+  async create(userId: string, shoppingList: CreateShoppingListDto) {
+    const newShoppingList = await this.db.transaction(async (tx) => {
+      const [newShoppingList] = await tx
+        .insert(shoppingLists)
+        .values(shoppingList)
+        .returning()
+      const [shoppingListMember] = await tx
+        .insert(shoppingListMembers)
+        .values({
+          userId,
+          shoppingListId: newShoppingList.id
+        })
+        .returning()
+
+      if (!shoppingListMember) tx.rollback()
+      return newShoppingList
+    })
+    return newShoppingList
   }
 
   async delete(id: number) {

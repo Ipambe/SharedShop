@@ -5,9 +5,12 @@ import {
   Inject,
   Param,
   Patch,
-  Post
+  Post,
+  Req
 } from '@nestjs/common'
 import { ShoppingListsService } from './shopping-lists.service'
+import { CreateShoppingListDto } from './DTOs/CreateShoppingListDto'
+import { Request } from 'express'
 
 @Controller('shopping-lists')
 export class ShoppingListsController {
@@ -20,6 +23,14 @@ export class ShoppingListsController {
   async getShoppingListById(id: number) {
     const shoppingList = await this.shoppingListsService.getById(id)
     return shoppingList
+  }
+
+  @Post()
+  async createShoppingList(
+    shoppingList: CreateShoppingListDto,
+    @Req() req: Request
+  ) {
+    return await this.shoppingListsService.create(req.user!.sub, shoppingList)
   }
 
   @Delete(':id')
