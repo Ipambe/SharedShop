@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -27,7 +28,7 @@ export class ShoppingListsController {
 
   @Post()
   async createShoppingList(
-    shoppingList: CreateShoppingListDto,
+    @Body() shoppingList: CreateShoppingListDto,
     @Req() req: Request
   ) {
     return await this.shoppingListsService.create(req.user!.sub, shoppingList)

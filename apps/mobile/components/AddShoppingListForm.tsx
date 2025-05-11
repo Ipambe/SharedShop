@@ -7,9 +7,14 @@ import { api } from '@/api'
 import { useStore } from '@/stores/store'
 
 export const AddShoppingListForm = () => {
-  const [isModalVisible, setIsModalVisible] = useState(true)
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const { getToken } = useAuth()
   const addShoppingList = useStore((s) => s.addShoppingList)
+  const [input, setInput] = useState('')
+
+  const handleInputChange = (text: string) => {
+    setInput(text)
+  }
 
   const showModal = () => {
     setIsModalVisible(true)
@@ -21,11 +26,18 @@ export const AddShoppingListForm = () => {
 
   const handleAddShoppingList = async () => {
     const token = await getToken()
-    const { data } = await api.post('', {
-      headers: {
-        Authorization: `Bearer ${token}`
+    console.log('token', token)
+    const { data } = await api.post(
+      'shopping-lists',
+      {
+        name: input
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
-    })
+    )
     console.log('data', data)
     addShoppingList(data)
     closeModal()
@@ -40,6 +52,8 @@ export const AddShoppingListForm = () => {
       >
         <XStack gap={10} alignItems='center'>
           <Input
+            value={input}
+            onChangeText={handleInputChange}
             placeholder='Nombre de la lista'
             fontSize={20}
             flex={1}
