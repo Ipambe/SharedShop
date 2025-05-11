@@ -15,7 +15,7 @@ export default function PrivateLayout() {
       const token = await getToken()
       if (!token) return console.error('Token is not available')
 
-      const { data, status } = await api.post<User>(
+      const { status } = await api.post<User>(
         'users',
         {
           id: user?.id,
@@ -28,7 +28,6 @@ export default function PrivateLayout() {
         }
       )
       if (status > 400) return await signOut()
-      console.log(data)
     }
     checkOrCreateUser()
   }, [signOut, user, getToken, isSignedIn])

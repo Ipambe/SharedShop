@@ -1,7 +1,7 @@
-import { Text, View } from 'react-native'
 import { ToggleModalButton } from './ToggleModalButton'
 import { WithModal } from './WithModal'
 import { useState } from 'react'
+import { Button, Form, Input } from 'tamagui'
 
 export const AddShoppingListForm = () => {
   const [isModalVisible, setIsModalVisible] = useState(true)
@@ -22,9 +22,12 @@ export const AddShoppingListForm = () => {
         isModalVisible={isModalVisible}
         modalTitle='Agregar lista de compras'
       >
-        <View>
-
-        </View>
+        <Form onSubmit={() => console.log()}>
+          <Input />
+          <Form.Trigger asChild>
+            <Button></Button>
+          </Form.Trigger>
+        </Form>
       </WithModal>
     </>
   )

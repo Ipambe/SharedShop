@@ -1,10 +1,10 @@
-import { api } from '@/api'
-import { useStore } from '@/stores/store'
-import { useEffect } from 'react'
-import { useAuth } from '@clerk/clerk-expo'
 import { View } from 'react-native'
 import { ShoppingLists } from '@/components/ShoppingLists'
 import { AddShoppingListForm } from '@/components/AddShoppingListForm'
+import { useStore } from '@/stores/store'
+import { useAuth } from '@clerk/clerk-expo'
+import { useEffect } from 'react'
+import { api } from '@/api'
 
 export default function Index() {
   const setShoppingLists = useStore((s) => s.setShoppingLists)
@@ -22,7 +22,6 @@ export default function Index() {
         }
       })
       setShoppingLists(data)
-      console.log('finished fetching', data)
     }
 
     fetchShoppingLists()

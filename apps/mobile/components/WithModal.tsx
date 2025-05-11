@@ -1,5 +1,4 @@
 import { Text, TouchableOpacity, View } from 'react-native'
-import {} from '@tamagui/core'
 
 interface WithModalProps {
   isModalVisible: boolean
@@ -18,7 +17,9 @@ export const WithModal = ({
     <View
       className={`absolute top-0 left-0 right-0 bottom-0 bg-black/50 ${isModalVisible ? 'flex' : 'hidden'} items-center justify-center`}
     >
-      <View className='w-96 aspect-square bg-white dark:bg-neutral-700 rounded-lg p-4'>
+      <View
+        className='w-96 aspect-square bg-fuchsia-50 dark:bg-neutral-700 rounded-lg p-4 gap-10'
+      >
         <View className='flex-row items-center justify-between'>
           <Text className='text-2xl text-neutral-100'>{modalTitle}</Text>
           <TouchableOpacity
@@ -28,7 +29,7 @@ export const WithModal = ({
             <Text className='text-2xl text-neutral-100'>X</Text>
           </TouchableOpacity>
         </View>
-        <View>{children}</View>
+        {children}
       </View>
     </View>
   )
