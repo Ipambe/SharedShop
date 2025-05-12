@@ -13,7 +13,7 @@ export const AddShoppingListForm = () => {
   const [input, setInput] = useState('')
 
   const handleInputChange = (text: string) => {
-    setInput(text)
+    setInput(text.trim())
   }
 
   const showModal = () => {
@@ -26,7 +26,6 @@ export const AddShoppingListForm = () => {
 
   const handleAddShoppingList = async () => {
     const token = await getToken()
-    console.log('token', token)
     const { data } = await api.post(
       'shopping-lists',
       {
@@ -38,10 +37,10 @@ export const AddShoppingListForm = () => {
         }
       }
     )
-    console.log('data', data)
     addShoppingList(data)
     closeModal()
   }
+
   return (
     <>
       <ToggleModalButton showModal={showModal} />
