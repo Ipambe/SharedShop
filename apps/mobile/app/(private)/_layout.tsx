@@ -14,7 +14,7 @@ export default function PrivateLayout() {
 
       const token = await getToken()
       if (!token) return console.error('Token is not available')
-
+      // return await signOut()
       const { status } = await api.post<User>(
         'users',
         {

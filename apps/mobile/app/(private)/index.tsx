@@ -13,7 +13,6 @@ export default function Index() {
     if (!isLoaded) return
 
     const fetchShoppingLists = async () => {
-      console.log('fetching shopping lists')
       const token = await getToken()
 
       const { data } = await api.get(`/users/shopping-lists`, {
