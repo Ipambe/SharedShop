@@ -1,13 +1,13 @@
 import { View } from 'react-native'
 import { ShoppingLists } from '@/components/ShoppingLists'
 import { AddShoppingListForm } from '@/components/AddShoppingListForm'
-import { useStore } from '@/stores/store'
+import { useShoppingListsStore } from '@/stores/store'
 import { useAuth } from '@clerk/clerk-expo'
 import { useEffect } from 'react'
 import { api } from '@/api'
 
 export default function Index() {
-  const setShoppingLists = useStore((s) => s.setShoppingLists)
+  const setShoppingLists = useShoppingListsStore((s) => s.setShoppingLists)
   const { getToken, isLoaded } = useAuth()
   useEffect(() => {
     if (!isLoaded) return

@@ -4,12 +4,12 @@ import { WithModal } from './WithModal'
 import { useState } from 'react'
 import { Input, Button, XStack } from 'tamagui'
 import { api } from '@/api'
-import { useStore } from '@/stores/store'
+import { useShoppingListsStore } from '@/stores/store'
 
 export const AddShoppingListForm = () => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const { getToken } = useAuth()
-  const addShoppingList = useStore((s) => s.addShoppingList)
+  const addShoppingList = useShoppingListsStore((s) => s.addShoppingList)
   const [input, setInput] = useState('')
 
   const handleInputChange = (text: string) => {

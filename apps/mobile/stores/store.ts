@@ -1,4 +1,4 @@
-import { ShoppingList } from '@/types'
+import { Product, ShoppingList, ShoppingListMember } from '@/types'
 import { create } from 'zustand'
 
 interface ShoppingListsStore {
@@ -8,7 +8,15 @@ interface ShoppingListsStore {
   removeShoppingList: (id: number) => void
 }
 
-export const useStore = create<ShoppingListsStore>()((set) => ({
+interface ShoppingListStore {
+  shoppingList: { products: Product[]; members: ShoppingListMember[] }
+  setShoppingList: (shoppingList: {
+    products: Product[]
+    members: ShoppingListMember[]
+  }) => void
+}
+
+export const useShoppingListsStore = create<ShoppingListsStore>()((set) => ({
   shoppingLists: [],
   setShoppingLists: (shoppingLists) => set({ shoppingLists }),
   addShoppingList: (list) =>
@@ -19,4 +27,9 @@ export const useStore = create<ShoppingListsStore>()((set) => ({
     set((state) => ({
       shoppingLists: state.shoppingLists.filter((list) => list.id !== id)
     }))
+}))
+
+export const useShoppingListStore = create<ShoppingListStore>()((set) => ({
+  shoppingList: { products: [], members: [] },
+  setShoppingList: (shoppingList) => set({ shoppingList })
 }))

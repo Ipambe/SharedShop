@@ -1,9 +1,9 @@
-import { useStore } from '@/stores/store'
+import { useShoppingListsStore } from '@/stores/store'
 import { FlatList } from 'react-native'
 import { Link } from 'expo-router'
 
 export const ShoppingLists = () => {
-  const shoppingLists = useStore((s) => s.shoppingLists)
+  const shoppingLists = useShoppingListsStore((s) => s.shoppingLists)
   return (
     <FlatList
       className='flex-1 mt-16'

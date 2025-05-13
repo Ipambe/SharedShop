@@ -15,7 +15,6 @@ export default function RootLayout() {
           <Tabs
             screenOptions={{
               headerShown: false,
-
               tabBarStyle: {
                 display: 'none'
               }
