@@ -9,6 +9,6 @@ export const shoppingLists = sqliteTable('shopping-lists', {
 })
 
 export const shoppingListsRelations = relations(shoppingLists, ({ many }) => ({
-  shoppingListMembers: many(shoppingListMembers),
-  shoppingListItems: many(shoppingListItems)
+  members: many(shoppingListMembers),
+  items: many(shoppingListItems)
 }))

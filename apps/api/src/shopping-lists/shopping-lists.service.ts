@@ -38,7 +38,8 @@ export class ShoppingListsService {
         .insert(shoppingListMembers)
         .values({
           userId,
-          shoppingListId: newShoppingList.id
+          shoppingListId: newShoppingList.id,
+          isOwner: true
         })
         .returning()
 
@@ -78,7 +79,7 @@ export class ShoppingListsService {
     const shoppingList = await this.db.query.shoppingLists.findFirst({
       where: eq(shoppingLists.id, id),
       with: {
-        shoppingListMembers: true
+        members: true
       }
     })
 
@@ -88,7 +89,7 @@ export class ShoppingListsService {
         HttpStatus.NOT_FOUND
       )
 
-    return shoppingList.shoppingListMembers
+    return shoppingList.members
   }
 
   async toggleStatus(id: number, itemId: number) {

@@ -4,8 +4,8 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
 import { users } from '@/common/database/schema/users'
 import { CreateUserDto } from './DTOs/CreateUserDto'
 import { shoppingLists } from '@/common/database/schema/shopping-lists'
-import { shoppingListMembers } from '@/common/database/schema/shopping-list-members'
 import { eq } from 'drizzle-orm'
+import { shoppingListMembers } from '@/common/database/schema/shopping-list-members'
 
 @Injectable()
 export class UserService {
@@ -34,23 +34,48 @@ export class UserService {
   }
 
   async getShoppingLists(id: string) {
-    try {
-      const lists = await this.db
-        .select({ id: shoppingLists.id, name: shoppingLists.name })
-        .from(shoppingLists)
-        .where(eq(shoppingListMembers.userId, id))
-        .innerJoin(
-          shoppingListMembers,
-          eq(shoppingLists.id, shoppingListMembers.shoppingListId)
-        )
-        .innerJoin(users, eq(shoppingListMembers.userId, users.id))
-      return lists
-    } catch (error) {
-      console.error(error)
+    const shoppingLists = await this.db.query.shoppingLists.findMany({
+      with: {
+        members: {
+          where: eq(shoppingListMembers.userId, id),
+          columns: {
+            createdAt: false,
+            isOwner: false,
+            shoppingListId: false
+          }
+        }
+      }
+    })
+
+    if (!shoppingLists)
       throw new HttpException(
-        `Error al obtener las listas de compras del usuario con id ${id}`,
-        HttpStatus.INTERNAL_SERVER_ERROR
+        `No existe un usuario con el id ${id}`,
+        HttpStatus.NOT_FOUND
       )
-    }
+
+    return shoppingLists
+  }
+
+  async getShoppingList(id: number) {
+    const shoppingList = await this.db.query.shoppingLists.findFirst({
+      where: eq(shoppingLists.id, id),
+      with: {
+        items: {
+          columns: {
+            productId: true,
+            status: true
+          }
+        },
+        members: true
+      },
+      columns: {}
+    })
+
+    if (!shoppingList)
+      throw new HttpException(
+        `No existe una lista de compras con el id ${id}`,
+        HttpStatus.NOT_FOUND
+      )
+    return shoppingList
   }
 }
