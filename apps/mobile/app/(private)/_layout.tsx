@@ -34,7 +34,7 @@ export default function PrivateLayout() {
 
   if (!isLoaded) return null
 
-  if (!isSignedIn) return <Redirect href='/(public)' />
+  if (!isSignedIn) return <Redirect href="/(public)" />
 
   return (
     <Tabs

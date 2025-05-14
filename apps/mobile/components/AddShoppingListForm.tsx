@@ -49,13 +49,13 @@ export const AddShoppingListForm = () => {
       <WithModal
         closeModal={closeModal}
         isModalVisible={isModalVisible}
-        modalTitle='Agregar lista de compras'
+        modalTitle="Agregar lista de compras"
       >
-        <XStack gap={10} alignItems='center'>
+        <XStack gap={10} alignItems="center">
           <Input
             value={input}
             onChangeText={handleInputChange}
-            placeholder='Nombre de la lista'
+            placeholder="Nombre de la lista"
             fontSize={20}
             flex={1}
             borderRadius={10}

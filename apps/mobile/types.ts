@@ -20,8 +20,10 @@ export interface ShoppingListItem {
 }
 
 export interface ShoppingListMember {
-  userId: string
-  shoppingListId: number
   isOwner: boolean
-  createdAt: string
+  createdAt: Date
+  user: {
+    id: string
+    username: string
+  }
 }

@@ -31,10 +31,10 @@ export default function Index() {
   )
 
   return (
-    <View className='flex-1 items-center justify-center bg-black'>
+    <View className="flex-1 items-center justify-center bg-black">
       <TouchableOpacity
         onPress={() => signInHandler('oauth_google')}
-        className='bg-cyan-600 p-4 rounded shadow-md'
+        className="rounded bg-cyan-600 p-4 shadow-md"
       >
         <Text>Sign in with Google SSO</Text>
       </TouchableOpacity>

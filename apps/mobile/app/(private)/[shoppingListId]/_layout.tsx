@@ -27,7 +27,7 @@ export default function ShoppingListLayout() {
   return (
     <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
-        name='index'
+        name="index"
         options={{
           title: 'Shopping List',
           href: {
@@ -37,7 +37,7 @@ export default function ShoppingListLayout() {
         }}
       />
       <Tabs.Screen
-        name='products'
+        name="products"
         options={{
           title: 'Products',
           href: {
@@ -47,7 +47,7 @@ export default function ShoppingListLayout() {
         }}
       />
       <Tabs.Screen
-        name='members'
+        name="members"
         options={{
           title: 'Members',
           href: {

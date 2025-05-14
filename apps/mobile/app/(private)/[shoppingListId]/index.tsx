@@ -1,14 +1,18 @@
-import { useLocalSearchParams } from 'expo-router'
-import { View, Text } from 'react-native'
+import { ListItemCard } from '@/components/ListItemCard'
+import { WithDarkModeBackground } from '@/components/WithDarkModeBackground'
+import { useShoppingListStore } from '@/stores/store'
+import { View } from 'react-native'
 
 export default function Index() {
-  const { shoppingListId } = useLocalSearchParams() as {
-    shoppingListId: string
-  }
+  const products = useShoppingListStore((s) => s.shoppingList.products)
 
   return (
-    <View className='flex-1 items-center justify-center'>
-      <Text className='text-2xl font-bold'>{shoppingListId} - index</Text>
-    </View>
+    <WithDarkModeBackground className="p-4">
+      <View className="mt-6 flex-1">
+        {products.map((product) => (
+          <ListItemCard key={product.id} text={product.name} />
+        ))}
+      </View>
+    </WithDarkModeBackground>
   )
 }

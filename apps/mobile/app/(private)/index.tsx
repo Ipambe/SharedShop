@@ -1,10 +1,11 @@
-import { View } from 'react-native'
+import { Text } from 'react-native'
 import { ShoppingLists } from '@/components/ShoppingLists'
 import { AddShoppingListForm } from '@/components/AddShoppingListForm'
 import { useShoppingListsStore } from '@/stores/store'
 import { useAuth } from '@clerk/clerk-expo'
 import { useEffect } from 'react'
 import { api } from '@/api'
+import { WithDarkModeBackground } from '@/components/WithDarkModeBackground'
 
 export default function Index() {
   const setShoppingLists = useShoppingListsStore((s) => s.setShoppingLists)
@@ -27,10 +28,12 @@ export default function Index() {
   }, [isLoaded, getToken, setShoppingLists])
 
   return (
-    <View className='flex-1 relative bg-neutral-300 dark:bg-neutral-950'>
+    <WithDarkModeBackground className="relative flex-1 gap-8 p-4">
+      <Text className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+        Listas de compras
+      </Text>
       <ShoppingLists />
       <AddShoppingListForm />
-    </View>
+    </WithDarkModeBackground>
   )
 }
-

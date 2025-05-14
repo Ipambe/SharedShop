@@ -6,7 +6,7 @@ export default function PublicLayout() {
 
   if (!isLoaded) return null
 
-  if (isSignedIn) return <Redirect href='/(private)' />
+  if (isSignedIn) return <Redirect href="/(private)" />
 
   return (
     <Tabs
@@ -16,7 +16,7 @@ export default function PublicLayout() {
           display: 'none'
         }
       }}
-      backBehavior='none'
+      backBehavior="none"
     />
   )
 }

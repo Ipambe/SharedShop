@@ -44,18 +44,14 @@ export const NewProductForm = () => {
 
   return (
     <View>
-      <XStack>
+      <XStack gap={8}>
         <Input
-          placeholder='Nombre del producto'
+          placeholder="Nombre del producto"
           flex={1}
-          marginRight='$2'
           value={productName}
           onChangeText={handleChange}
         />
-        <Button
-          onPress={handleSubmit}
-          theme='black'
-        >
+        <Button onPress={handleSubmit} theme="white">
           Agregar
         </Button>
       </XStack>

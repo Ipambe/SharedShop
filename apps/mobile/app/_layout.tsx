@@ -23,8 +23,8 @@ export default function RootLayout() {
         </TamaguiProvider>
       </ClerkProvider>
       <StatusBar
-        className='bg-neutral-300 dark:bg-neutral-950'
-        backgroundColor='transparent'
+        className="bg-neutral-300 dark:bg-neutral-950"
+        backgroundColor="transparent"
       />
     </>
   )
