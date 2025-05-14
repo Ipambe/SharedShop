@@ -67,9 +67,19 @@ export class UserService {
             shoppingListId: false
           }
         },
-        members: true
+        members: {
+          columns: {
+            shoppingListId: false,
+            userId: false,
+            createdAt: true,
+            isOwner: true
+          },
+          with: {
+            user: true
+          }
+        }
       },
-      columns: {}
+      columns: { id: false, name: false }
     })
 
     if (!shoppingList)
