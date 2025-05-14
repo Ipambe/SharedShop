@@ -1,11 +1,12 @@
 import { DATABASE_CONNECTION } from '@/common/database/database-connection'
 import { DatabaseType } from '@/common/database/schema'
-import { shoppingListItems } from '@/common/database/schema/shopping-list-items'
 import { shoppingLists } from '@/common/database/schema/shopping-lists'
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
-import { and, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { CreateShoppingListDto } from './DTOs/CreateShoppingListDto'
 import { shoppingListMembers } from '@/common/database/schema/shopping-list-members'
+import { CreateProductDto } from '@/products/DTOs/CreateProductDto'
+import { products } from '@/common/database/schema/products'
 
 @Injectable()
 export class ShoppingListsService {
@@ -61,18 +62,22 @@ export class ShoppingListsService {
       )
   }
 
-  async addItem(id: number) {
-    const shoppingList = await this.db.query.shoppingLists.findFirst({
-      where: eq(shoppingLists.id, id)
-    })
+  async createProduct(id: number, product: CreateProductDto) {
+    const [newProduct] = await this.db
+      .insert(products)
+      .values({
+        ...product,
+        shoppingListId: id
+      })
+      .onConflictDoNothing()
+      .returning()
 
-    if (!shoppingList)
+    if (!newProduct)
       throw new HttpException(
-        `No existe una lista de compras con el id ${id}`,
-        HttpStatus.NOT_FOUND
+        'No se pudo crear el producto',
+        HttpStatus.INTERNAL_SERVER_ERROR
       )
-
-    return shoppingList
+    return newProduct
   }
 
   async getMembers(id: number) {
@@ -92,25 +97,25 @@ export class ShoppingListsService {
     return shoppingList.members
   }
 
-  async toggleStatus(id: number, itemId: number) {
-    const listNproduct = await this.db.query.shoppingListItems.findFirst({
-      where: (sli, { and, eq }) =>
-        and(eq(sli.shoppingListId, id), eq(sli.productId, itemId))
-    })
+  // async toggleStatus(id: number, itemId: number) {
+  //   const listNproduct = await this.db.query.shoppingListItems.findFirst({
+  //     where: (sli, { and, eq }) =>
+  //       and(eq(sli.shoppingListId, id), eq(sli.productId, itemId))
+  //   })
 
-    if (!listNproduct)
-      throw new HttpException(
-        `No existe un item con el id ${itemId} en la lista de compras con el id ${id}`,
-        HttpStatus.NOT_FOUND
-      )
-    await this.db
-      .update(shoppingListItems)
-      .set({ status: !listNproduct.status })
-      .where(
-        and(
-          eq(shoppingListItems.shoppingListId, id),
-          eq(shoppingListItems.productId, itemId)
-        )
-      )
-  }
+  //   if (!listNproduct)
+  //     throw new HttpException(
+  //       `No existe un item con el id ${itemId} en la lista de compras con el id ${id}`,
+  //       HttpStatus.NOT_FOUND
+  //     )
+  //   await this.db
+  //     .update(shoppingListItems)
+  //     .set({ status: !listNproduct.status })
+  //     .where(
+  //       and(
+  //         eq(shoppingListItems.shoppingListId, id),
+  //         eq(shoppingListItems.productId, itemId)
+  //       )
+  //     )
+  // }
 }

@@ -5,13 +5,13 @@ import {
   Get,
   Inject,
   Param,
-  Patch,
   Post,
   Req
 } from '@nestjs/common'
 import { ShoppingListsService } from './shopping-lists.service'
 import { CreateShoppingListDto } from './DTOs/CreateShoppingListDto'
 import { Request } from 'express'
+import { CreateProductDto } from '@/products/DTOs/CreateProductDto'
 
 @Controller('shopping-lists')
 export class ShoppingListsController {
@@ -21,7 +21,7 @@ export class ShoppingListsController {
   ) {}
 
   @Get(':id')
-  async getShoppingListById(id: number) {
+  async getShoppingListById(@Param('id') id: number) {
     const shoppingList = await this.shoppingListsService.getById(id)
     return shoppingList
   }
@@ -35,28 +35,25 @@ export class ShoppingListsController {
   }
 
   @Delete(':id')
-  async deleteShoppingList(id: number) {
+  async deleteShoppingList(@Param('id') id: number) {
     await this.shoppingListsService.delete(id)
   }
 
-  @Post(':id/items')
-  async addItemToShoppingList(id: number) {
-    const shoppingList = await this.shoppingListsService.addItem(id)
-    return shoppingList
+  @Post(':id/products')
+  async addProductToShoppingList(
+    @Param('id') id: number,
+    @Body() product: CreateProductDto
+  ) {
+    const newProduct = await this.shoppingListsService.createProduct(
+      id,
+      product
+    )
+    return newProduct
   }
 
   @Get(':id/members')
-  async getMembers(id: number) {
+  async getMembers(@Param('id') id: number) {
     const members = await this.shoppingListsService.getMembers(id)
     return members
-  }
-
-  @Patch(':id/items/:itemId')
-  async updateItem(@Param('id') id: number, @Param('itemId') itemId: number) {
-    const shoppingList = await this.shoppingListsService.toggleStatus(
-      id,
-      itemId
-    )
-    return shoppingList
   }
 }

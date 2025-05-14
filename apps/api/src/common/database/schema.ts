@@ -1,10 +1,6 @@
 import { LibSQLDatabase } from 'drizzle-orm/libsql'
 import { products, productsRelations } from './schema/products'
 import {
-  shoppingListItems,
-  shoppingListItemsRelations
-} from './schema/shopping-list-items'
-import {
   shoppingListMembers,
   shoppingListMembersRelations
 } from './schema/shopping-list-members'
@@ -13,15 +9,13 @@ import { users, usersRelations } from './schema/users'
 
 export const schema = {
   users,
-  products,
-  shoppingLists,
-  shoppingListMembers,
-  shoppingListItems,
   usersRelations,
+  products,
   productsRelations,
+  shoppingLists,
   shoppingListsRelations,
-  shoppingListMembersRelations,
-  shoppingListItemsRelations
+  shoppingListMembers,
+  shoppingListMembersRelations
 }
 
 export type DatabaseType = LibSQLDatabase<typeof schema>

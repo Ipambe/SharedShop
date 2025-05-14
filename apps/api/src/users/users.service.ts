@@ -60,10 +60,11 @@ export class UserService {
     const shoppingList = await this.db.query.shoppingLists.findFirst({
       where: eq(shoppingLists.id, id),
       with: {
-        items: {
+        products: {
           columns: {
-            productId: true,
-            status: true
+            id: true,
+            name: true,
+            shoppingListId: false
           }
         },
         members: true

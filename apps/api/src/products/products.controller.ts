@@ -1,6 +1,5 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common'
+import { Controller, Inject } from '@nestjs/common'
 import { ProductsService } from './products.service'
-import { CreateProductDto } from './DTOs/CreateProductDto'
 
 @Controller('products')
 export class ProductsController {
@@ -9,9 +8,9 @@ export class ProductsController {
     private readonly productService: ProductsService
   ) {}
 
-  @Post()
-  async create(@Body() product: CreateProductDto) {
-    const newProduct = await this.productService.create(product)
-    return newProduct
-  }
+  // @Post()
+  // async create(@Body() product: CreateProductDto) {
+  //   const newProduct = await this.productService.create(product)
+  //   return newProduct
+  // }
 }

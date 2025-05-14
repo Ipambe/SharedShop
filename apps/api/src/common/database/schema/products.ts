@@ -1,12 +1,22 @@
+import { sqliteTable, integer, text, unique } from 'drizzle-orm/sqlite-core'
+import { shoppingLists } from './shopping-lists'
 import { relations } from 'drizzle-orm'
-import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
-import { shoppingListItems } from './shopping-list-items'
 
-export const products = sqliteTable('products', {
-  id: integer().primaryKey({ autoIncrement: true }).notNull(),
-  name: text().notNull().unique()
-})
+export const products = sqliteTable(
+  'products',
+  {
+    id: integer().primaryKey({ autoIncrement: true }).notNull(),
+    name: text().notNull(),
+    shoppingListId: integer()
+      .notNull()
+      .references(() => shoppingLists.id)
+  },
+  (t) => [unique().on(t.name, t.shoppingListId)]
+)
 
-export const productsRelations = relations(products, ({ many }) => ({
-  shoppingListItems: many(shoppingListItems)
+export const productsRelations = relations(products, ({ one }) => ({
+  shoppingList: one(shoppingLists, {
+    fields: [products.shoppingListId],
+    references: [shoppingLists.id]
+  })
 }))
