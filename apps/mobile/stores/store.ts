@@ -14,6 +14,7 @@ interface ShoppingListStore {
     products: Product[]
     members: ShoppingListMember[]
   }) => void
+  addProduct: (product: Product) => void
 }
 
 export const useShoppingListsStore = create<ShoppingListsStore>()((set) => ({
@@ -31,5 +32,12 @@ export const useShoppingListsStore = create<ShoppingListsStore>()((set) => ({
 
 export const useShoppingListStore = create<ShoppingListStore>()((set) => ({
   shoppingList: { products: [], members: [] },
-  setShoppingList: (shoppingList) => set({ shoppingList })
+  setShoppingList: (shoppingList) => set({ shoppingList }),
+  addProduct: (product) =>
+    set((state) => ({
+      shoppingList: {
+        ...state.shoppingList,
+        products: [...state.shoppingList.products, product]
+      }
+    }))
 }))

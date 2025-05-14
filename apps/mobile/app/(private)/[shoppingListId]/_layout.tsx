@@ -1,13 +1,15 @@
 import { api } from '@/api'
+import { useShoppingListStore } from '@/stores/store'
 import { useAuth } from '@clerk/clerk-expo'
 import { Tabs, useLocalSearchParams } from 'expo-router'
 import { useEffect, useRef } from 'react'
 
 export default function ShoppingListLayout() {
-  const { shoppingListId } = useLocalSearchParams()
-  // const { getToken } = useAuth()
-  // const refGetToken = useRef(getToken)
-  const refGetToken = useRef(useAuth().getToken) // Hay que usar useRef para evitar que se vuelva a crear la función en cada renderizado
+  const { shoppingListId } = useLocalSearchParams() as {
+    shoppingListId: string
+  }
+  const { setShoppingList } = useShoppingListStore()
+  const refGetToken = useRef(useAuth().getToken)
 
   useEffect(() => {
     const fetchShoppingList = async () => {
@@ -17,16 +19,43 @@ export default function ShoppingListLayout() {
           Authorization: `Bearer ${token}`
         }
       })
-      console.log('data', data)
+      setShoppingList(data)
     }
     fetchShoppingList()
-  }, [shoppingListId])
+  }, [shoppingListId, setShoppingList])
 
   return (
     <Tabs screenOptions={{ headerShown: false }}>
-      <Tabs.Screen name='index' options={{ title: 'Shopping List' }} />
-      <Tabs.Screen name='products' options={{ title: 'Products' }} />
-      <Tabs.Screen name='members' options={{ title: 'Members' }} />
+      <Tabs.Screen
+        name='index'
+        options={{
+          title: 'Shopping List',
+          href: {
+            pathname: '/(private)/[shoppingListId]',
+            params: { shoppingListId }
+          }
+        }}
+      />
+      <Tabs.Screen
+        name='products'
+        options={{
+          title: 'Products',
+          href: {
+            pathname: '/(private)/[shoppingListId]/products',
+            params: { shoppingListId }
+          }
+        }}
+      />
+      <Tabs.Screen
+        name='members'
+        options={{
+          title: 'Members',
+          href: {
+            pathname: '/(private)/[shoppingListId]/members',
+            params: { shoppingListId }
+          }
+        }}
+      />
     </Tabs>
   )
 }

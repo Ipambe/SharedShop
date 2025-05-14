@@ -26,6 +26,7 @@ export const AddShoppingListForm = () => {
 
   const handleAddShoppingList = async () => {
     const token = await getToken()
+
     const { data } = await api.post(
       'shopping-lists',
       {
@@ -38,6 +39,7 @@ export const AddShoppingListForm = () => {
       }
     )
     addShoppingList(data)
+    setInput('')
     closeModal()
   }
 
