@@ -1,4 +1,4 @@
-import { Controller, Inject } from '@nestjs/common'
+import { Controller, Inject, Param, Patch } from '@nestjs/common'
 import { ProductsService } from './products.service'
 
 @Controller('products')
@@ -8,9 +8,8 @@ export class ProductsController {
     private readonly productService: ProductsService
   ) {}
 
-  // @Post()
-  // async create(@Body() product: CreateProductDto) {
-  //   const newProduct = await this.productService.create(product)
-  //   return newProduct
-  // }
+  @Patch(':id/bought')
+  async toggleBought(@Param('id') id: number) {
+    await this.productService.toggleBought(id)
+  }
 }

@@ -6,6 +6,8 @@ export interface User {
 export interface Product {
   id: number
   name: string
+  bought: boolean
+  quantity: number
 }
 
 export interface ShoppingList {

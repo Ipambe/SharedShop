@@ -1,6 +1,8 @@
 import { DATABASE_CONNECTION } from '@/common/database/database-connection'
 import { DatabaseType } from '@/common/database/schema'
-import { Inject, Injectable } from '@nestjs/common'
+import { products } from '@/common/database/schema/products'
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
+import { eq } from 'drizzle-orm'
 
 @Injectable()
 export class ProductsService {
@@ -9,13 +11,20 @@ export class ProductsService {
     private readonly db: DatabaseType
   ) {}
 
-  // async create(product: CreateProductDto) {
-  //   const [newProduct] = await this.db
-  //     .insert(products)
-  //     .values(product)
-  //     .returning()
-  //     .onConflictDoNothing()
+  async toggleBought(id: number) {
+    const product = await this.db.query.products.findFirst({
+      where: eq(products.id, id)
+    })
 
-  //   return newProduct
-  // }
+    if (!product)
+      throw new HttpException(
+        `No existe un producto con el id ${id}`,
+        HttpStatus.NOT_FOUND
+      )
+
+    await this.db
+      .update(products)
+      .set({ bought: !product.bought })
+      .where(eq(products.id, id))
+  }
 }

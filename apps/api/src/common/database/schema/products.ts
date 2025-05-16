@@ -7,6 +7,8 @@ export const products = sqliteTable(
   {
     id: integer().primaryKey({ autoIncrement: true }).notNull(),
     name: text().notNull(),
+    bought: integer({ mode: 'boolean' }).notNull().default(false),
+    quantity: integer().notNull().default(1),
     shoppingListId: integer()
       .notNull()
       .references(() => shoppingLists.id)

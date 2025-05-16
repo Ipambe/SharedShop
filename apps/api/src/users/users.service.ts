@@ -64,6 +64,8 @@ export class UserService {
           columns: {
             id: true,
             name: true,
+            bought: true,
+            quantity: true,
             shoppingListId: false
           }
         },

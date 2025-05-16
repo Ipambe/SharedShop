@@ -26,7 +26,7 @@ export const NewProductForm = () => {
     const { data, status } = await api.post(
       `shopping-lists/${shoppingListId}/products`,
       {
-        name: productName
+        name: productName.trim()
       },
       {
         headers: {

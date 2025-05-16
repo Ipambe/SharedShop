@@ -15,6 +15,7 @@ interface ShoppingListStore {
     members: ShoppingListMember[]
   }) => void
   addProduct: (product: Product) => void
+  toggleBought: (id: number) => void
 }
 
 export const useShoppingListsStore = create<ShoppingListsStore>()((set) => ({
@@ -33,11 +34,22 @@ export const useShoppingListsStore = create<ShoppingListsStore>()((set) => ({
 export const useShoppingListStore = create<ShoppingListStore>()((set) => ({
   shoppingList: { products: [], members: [] },
   setShoppingList: (shoppingList) => set({ shoppingList }),
-  addProduct: (product) =>
+  addProduct(product) {
     set((state) => ({
       shoppingList: {
-        ...state.shoppingList,
+        members: state.shoppingList.members,
         products: [...state.shoppingList.products, product]
       }
     }))
+  },
+  toggleBought(id) {
+    set((state) => ({
+      shoppingList: {
+        members: state.shoppingList.members,
+        products: state.shoppingList.products.map((e) =>
+          e.id === id ? { ...e, bought: !e.bought } : e
+        )
+      }
+    }))
+  }
 }))
