@@ -2,21 +2,15 @@ import { api } from '@/api'
 import { WithDarkModeBackground } from '@/components/WithDarkModeBackground'
 import { useShoppingListStore } from '@/stores/store'
 import { useAuth } from '@clerk/clerk-expo'
-import { useOptimistic } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 export default function Index() {
   const products = useShoppingListStore((s) => s.shoppingList.products)
   const toggleBought = useShoppingListStore((s) => s.toggleBought)
-  const [optimisticProducts, setOptimisticProducts] = useOptimistic(
-    products,
-    (op, id: number) =>
-      op.map((e) => (e.id === id ? { ...e, bought: !e.bought } : e))
-  )
+
   const { getToken } = useAuth()
 
   const toggleBoughtHandler = async (id: number) => {
-    setOptimisticProducts(id)
     const token = await getToken()
     const res = await api.patch(
       `products/${id}/bought`,
@@ -27,7 +21,7 @@ export default function Index() {
         }
       }
     )
-    if (res.status >= 400) return setOptimisticProducts(id)
+    if (res.status >= 400) return
 
     toggleBought(id)
   }
@@ -35,7 +29,7 @@ export default function Index() {
   return (
     <WithDarkModeBackground className="p-4">
       <View>
-        {optimisticProducts.map((product) => (
+        {products.map((product) => (
           <TouchableOpacity
             key={product.id}
             onPress={() => toggleBoughtHandler(product.id)}
