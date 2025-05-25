@@ -13,7 +13,7 @@ export const WithDarkModeBackground = ({
 }: WithDarkModeProps) => {
   return (
     <View
-      className={`flex-1 bg-neutral-50 dark:bg-neutral-950 ${className}`}
+      className={`flex-1 bg-neutral-50 dark:bg-neutral-950 mt-safe ${className}`}
       {...props}
     >
       {children}
