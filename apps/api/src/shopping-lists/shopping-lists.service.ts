@@ -7,12 +7,15 @@ import { CreateShoppingListDto } from './DTOs/CreateShoppingListDto'
 import { shoppingListMembers } from '@/common/database/schema/shopping-list-members'
 import { CreateProductDto } from '@/products/DTOs/CreateProductDto'
 import { products } from '@/common/database/schema/products'
+import { JwtService } from '@nestjs/jwt'
+import { invitations } from '@/common/database/schema/invitations'
 
 @Injectable()
 export class ShoppingListsService {
   constructor(
     @Inject(DATABASE_CONNECTION) // eslint-disable-next-line no-unused-vars
-    private readonly db: DatabaseType
+    private readonly db: DatabaseType,
+    private jwtService: JwtService
   ) {}
 
   async getById(id: number) {
@@ -97,25 +100,67 @@ export class ShoppingListsService {
     return shoppingList.members
   }
 
-  // async toggleStatus(id: number, itemId: number) {
-  //   const listNproduct = await this.db.query.shoppingListItems.findFirst({
-  //     where: (sli, { and, eq }) =>
-  //       and(eq(sli.shoppingListId, id), eq(sli.productId, itemId))
-  //   })
+  async generateInvitationURL(id: number, isSingleUse: boolean) {
+    const shoppingList = await this.db.query.shoppingLists.findFirst({
+      where: eq(shoppingLists.id, id)
+    })
 
-  //   if (!listNproduct)
-  //     throw new HttpException(
-  //       `No existe un item con el id ${itemId} en la lista de compras con el id ${id}`,
-  //       HttpStatus.NOT_FOUND
-  //     )
-  //   await this.db
-  //     .update(shoppingListItems)
-  //     .set({ status: !listNproduct.status })
-  //     .where(
-  //       and(
-  //         eq(shoppingListItems.shoppingListId, id),
-  //         eq(shoppingListItems.productId, itemId)
-  //       )
-  //     )
-  // }
+    if (!shoppingList)
+      throw new HttpException('No existe la lista', HttpStatus.NOT_FOUND)
+
+    const payload = {
+      shoppingListId: id
+    }
+    const token = await this.jwtService.signAsync(payload)
+
+    const [invitation] = await this.db
+      .insert(invitations)
+      .values({
+        token,
+        isSingleUse
+      })
+      .returning()
+
+    if (!invitation)
+      throw new HttpException(
+        'No se pudo crear la invitación',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      )
+
+    const invitationUrl = `https://sharedshop.app/invite/${id}?token=${invitation.token}`
+    return invitationUrl
+  }
+
+  async acceptInvitation(id: number, token: string, userId: string) {
+    const shoppingList = await this.db.query.shoppingLists.findFirst({
+      where: eq(shoppingLists.id, id)
+    })
+
+    if (!shoppingList)
+      throw new HttpException('No existe la lista', HttpStatus.NOT_FOUND)
+
+    const payload: {
+      shoppingListId: number
+    } = await this.jwtService.verifyAsync(token)
+
+    if (payload.shoppingListId !== id)
+      throw new HttpException('Token inválido', HttpStatus.UNAUTHORIZED)
+
+    const [shoppingListMember] = await this.db
+      .insert(shoppingListMembers)
+      .values({
+        userId,
+        shoppingListId: id
+      })
+      .onConflictDoNothing()
+      .returning()
+
+    if (!shoppingListMember)
+      throw new HttpException(
+        'No se pudo agregar el usuario a la lista',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      )
+
+    return shoppingList
+  }
 }
