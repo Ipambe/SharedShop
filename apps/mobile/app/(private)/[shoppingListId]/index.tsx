@@ -11,6 +11,7 @@ export default function Index() {
   const { getToken } = useAuth()
 
   const toggleBoughtHandler = async (id: number) => {
+    toggleBought(id) // Actualización optimista del estado
     const token = await getToken()
     const res = await api.patch(
       `products/${id}/bought`,
@@ -21,9 +22,7 @@ export default function Index() {
         }
       }
     )
-    if (res.status >= 400) return
-
-    toggleBought(id)
+    if (res.status >= 400) return toggleBought(id)
   }
 
   return (

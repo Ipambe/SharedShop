@@ -8,7 +8,6 @@ import { shoppingListMembers } from '@/common/database/schema/shopping-list-memb
 import { CreateProductDto } from '@/products/DTOs/CreateProductDto'
 import { products } from '@/common/database/schema/products'
 import { JwtService } from '@nestjs/jwt'
-import { invitations } from '@/common/database/schema/invitations'
 
 @Injectable()
 export class ShoppingListsService {
@@ -100,7 +99,7 @@ export class ShoppingListsService {
     return shoppingList.members
   }
 
-  async generateInvitationURL(id: number, isSingleUse: boolean) {
+  async generateInvitationURL(id: number) {
     const shoppingList = await this.db.query.shoppingLists.findFirst({
       where: eq(shoppingLists.id, id)
     })
@@ -110,24 +109,11 @@ export class ShoppingListsService {
 
     const payload = {
       shoppingListId: id
+      // isSingleUse
     }
     const token = await this.jwtService.signAsync(payload)
 
-    const [invitation] = await this.db
-      .insert(invitations)
-      .values({
-        token,
-        isSingleUse
-      })
-      .returning()
-
-    if (!invitation)
-      throw new HttpException(
-        'No se pudo crear la invitación',
-        HttpStatus.INTERNAL_SERVER_ERROR
-      )
-
-    const invitationUrl = `https://sharedshop.app/invite/${id}?token=${invitation.token}`
+    const invitationUrl = `https://sharedshop.app/invite/${id}?token=${token}`
     return invitationUrl
   }
 
@@ -141,6 +127,7 @@ export class ShoppingListsService {
 
     const payload: {
       shoppingListId: number
+      // isSingleUse: boolean
     } = await this.jwtService.verifyAsync(token)
 
     if (payload.shoppingListId !== id)
@@ -150,7 +137,8 @@ export class ShoppingListsService {
       .insert(shoppingListMembers)
       .values({
         userId,
-        shoppingListId: id
+        shoppingListId: id,
+        isOwner: false
       })
       .onConflictDoNothing()
       .returning()

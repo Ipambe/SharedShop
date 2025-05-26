@@ -57,15 +57,9 @@ export class ShoppingListsController {
     return members
   }
 
-  @Post(':id/invitations')
-  async generateInvitationURL(
-    @Param('id') id: number,
-    @Body('isSingleUse') isSingleUse: boolean
-  ) {
-    const url = await this.shoppingListsService.generateInvitationURL(
-      id,
-      isSingleUse
-    )
+  @Get(':id/invitations')
+  async generateInvitationURL(@Param('id') id: number) {
+    const url = await this.shoppingListsService.generateInvitationURL(id)
     return { url }
   }
 
