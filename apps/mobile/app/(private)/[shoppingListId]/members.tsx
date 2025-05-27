@@ -5,6 +5,7 @@ import { useShoppingListStore } from '@/stores/store'
 import { useAuth } from '@clerk/clerk-expo'
 import { useLocalSearchParams } from 'expo-router'
 import { Text, TouchableOpacity, View } from 'react-native'
+import { setStringAsync } from 'expo-clipboard'
 
 export default function Members() {
   const { members } = useShoppingListStore((state) => state.shoppingList)
@@ -22,7 +23,8 @@ export default function Members() {
         }
       }
     )
-    console.log(data)
+    await setStringAsync(data.url)
+    alert('Enlace copiado al portapapeles')
   }
 
   return (
