@@ -30,3 +30,5 @@
 - 🔒 Cada lista tiene un **token de invitación único** que puede ser compartido.
 - 📤 Cuando un usuario se une a través del enlace, automáticamente puede ver y modificar la lista.
 - 🔄 Cambios en tiempo real mediante WebSocket (agregar, marcar como comprado, eliminar).
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Ipambe/SharedShop)
