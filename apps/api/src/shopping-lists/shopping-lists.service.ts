@@ -7,14 +7,14 @@ import { CreateShoppingListDto } from './DTOs/CreateShoppingListDto'
 import { shoppingListMembers } from '@/common/database/schema/shopping-list-members'
 import { CreateProductDto } from '@/products/DTOs/CreateProductDto'
 import { products } from '@/common/database/schema/products'
-import { JwtService } from '@nestjs/jwt'
+// import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
 export class ShoppingListsService {
   constructor(
     @Inject(DATABASE_CONNECTION) // eslint-disable-next-line no-unused-vars
     private readonly db: DatabaseType,
-    private jwtService: JwtService
+    // private jwtService: JwtService
   ) {}
 
   async getById(id: number) {
@@ -99,56 +99,56 @@ export class ShoppingListsService {
     return shoppingList.members
   }
 
-  async generateInvitationURL(id: number) {
-    const shoppingList = await this.db.query.shoppingLists.findFirst({
-      where: eq(shoppingLists.id, id)
-    })
+  // async generateInvitationURL(id: number) {
+  //   const shoppingList = await this.db.query.shoppingLists.findFirst({
+  //     where: eq(shoppingLists.id, id)
+  //   })
 
-    if (!shoppingList)
-      throw new HttpException('No existe la lista', HttpStatus.NOT_FOUND)
+  //   if (!shoppingList)
+  //     throw new HttpException('No existe la lista', HttpStatus.NOT_FOUND)
 
-    const payload = {
-      shoppingListId: id
-      // isSingleUse
-    }
-    const token = await this.jwtService.signAsync(payload)
+  //   const payload = {
+  //     shoppingListId: id
+  //     // isSingleUse
+  //   }
+  //   const token = await this.jwtService.signAsync(payload)
 
-    const invitationUrl = `https://sharedshop.app/invite/${id}?token=${token}`
-    return invitationUrl
-  }
+  //   const invitationUrl = `https://sharedshop.app/invite/${id}?token=${token}`
+  //   return invitationUrl
+  // }
 
-  async acceptInvitation(id: number, token: string, userId: string) {
-    const shoppingList = await this.db.query.shoppingLists.findFirst({
-      where: eq(shoppingLists.id, id)
-    })
+  // async acceptInvitation(id: number, token: string, userId: string) {
+  //   const shoppingList = await this.db.query.shoppingLists.findFirst({
+  //     where: eq(shoppingLists.id, id)
+  //   })
 
-    if (!shoppingList)
-      throw new HttpException('No existe la lista', HttpStatus.NOT_FOUND)
+  //   if (!shoppingList)
+  //     throw new HttpException('No existe la lista', HttpStatus.NOT_FOUND)
 
-    const payload: {
-      shoppingListId: number
-      // isSingleUse: boolean
-    } = await this.jwtService.verifyAsync(token)
+  //   const payload: {
+  //     shoppingListId: number
+  //     // isSingleUse: boolean
+  //   } = await this.jwtService.verifyAsync(token)
 
-    if (payload.shoppingListId !== id)
-      throw new HttpException('Token inválido', HttpStatus.UNAUTHORIZED)
+  //   if (payload.shoppingListId !== id)
+  //     throw new HttpException('Token inválido', HttpStatus.UNAUTHORIZED)
 
-    const [shoppingListMember] = await this.db
-      .insert(shoppingListMembers)
-      .values({
-        userId,
-        shoppingListId: id,
-        isOwner: false
-      })
-      .onConflictDoNothing()
-      .returning()
+  //   const [shoppingListMember] = await this.db
+  //     .insert(shoppingListMembers)
+  //     .values({
+  //       userId,
+  //       shoppingListId: id,
+  //       isOwner: false
+  //     })
+  //     .onConflictDoNothing()
+  //     .returning()
 
-    if (!shoppingListMember)
-      throw new HttpException(
-        'No se pudo agregar el usuario a la lista',
-        HttpStatus.INTERNAL_SERVER_ERROR
-      )
+  //   if (!shoppingListMember)
+  //     throw new HttpException(
+  //       'No se pudo agregar el usuario a la lista',
+  //       HttpStatus.INTERNAL_SERVER_ERROR
+  //     )
 
-    return shoppingList
-  }
+  //   return shoppingList
+  // }
 }

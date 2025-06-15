@@ -57,23 +57,23 @@ export class ShoppingListsController {
     return members
   }
 
-  @Get(':id/invitations')
-  async generateInvitationURL(@Param('id') id: number) {
-    const url = await this.shoppingListsService.generateInvitationURL(id)
-    return { url }
-  }
+  // @Get(':id/invitations')
+  // async generateInvitationURL(@Param('id') id: number) {
+  //   const url = await this.shoppingListsService.generateInvitationURL(id)
+  //   return { url }
+  // }
 
-  @Post(':id/invitations')
-  async acceptInvitation(
-    @Param('id') id: number,
-    @Body('token') token: string,
-    @Req() req: Request
-  ) {
-    const shoppingList = await this.shoppingListsService.acceptInvitation(
-      id,
-      token,
-      req.user!.sub
-    )
-    return shoppingList
-  }
+  // @Post(':id/invitations')
+  // async acceptInvitation(
+  //   @Param('id') id: number,
+  //   @Body('token') token: string,
+  //   @Req() req: Request
+  // ) {
+  //   const shoppingList = await this.shoppingListsService.acceptInvitation(
+  //     id,
+  //     token,
+  //     req.user!.sub
+  //   )
+  //   return shoppingList
+  // }
 }
