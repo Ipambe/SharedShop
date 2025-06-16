@@ -1,5 +1,5 @@
 import { defineConfig } from 'drizzle-kit'
-import { TURSO_DB_URL, TURSO_AUTH_TOKEN } from 'env'
+import { TURSO_DB_URL, TURSO_AUTH_TOKEN } from './env'
 
 export default defineConfig({
   schema: './src/common/database/schema/*',
