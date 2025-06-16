@@ -11,5 +11,4 @@ export const shoppingLists = sqliteTable('shopping-lists', {
 export const shoppingListsRelations = relations(shoppingLists, ({ many }) => ({
   members: many(shoppingListMembers),
   products: many(products)
-  // products: many(shoppingListItems)
 }))

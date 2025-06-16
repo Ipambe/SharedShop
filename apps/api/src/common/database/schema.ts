@@ -6,6 +6,7 @@ import {
 } from './schema/shopping-list-members'
 import { shoppingLists, shoppingListsRelations } from './schema/shopping-lists'
 import { users, usersRelations } from './schema/users'
+import { invitations, invitationsRelations } from './schema/invitation'
 
 export const schema = {
   users,
@@ -15,7 +16,9 @@ export const schema = {
   shoppingLists,
   shoppingListsRelations,
   shoppingListMembers,
-  shoppingListMembersRelations
+  shoppingListMembersRelations,
+  invitations,
+  invitationsRelations
 }
 
 export type DatabaseType = LibSQLDatabase<typeof schema>
